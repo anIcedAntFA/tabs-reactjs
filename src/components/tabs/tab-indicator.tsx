@@ -35,8 +35,6 @@ function TabIndicator() {
       `[data-index="${activeValue}"]`
     ) as HTMLButtonElement;
 
-    console.log(currentActiveTab);
-
     setRect({
       left: currentActiveTab.offsetLeft,
       width: currentActiveTab.offsetWidth,
@@ -60,7 +58,7 @@ function TabIndicator() {
       style={{
         left: rect.left,
         width: rect.width,
-        transitionDuration: hasMeasured ? '0.3s' : '0s',
+        transitionDuration: hasMeasured ? '0.4s' : '0s',
       }}
     ></span>
   );

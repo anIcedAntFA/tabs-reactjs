@@ -19,18 +19,28 @@ function Tabs({
 }: TabsProps) {
   const [activeValue, setActiveValue] = useState<number>(defaultValue);
 
+  const [focusedValue, setFocusedValue] = useState<number>(defaultValue);
+
   const tabsRootRef = useRef<ElementRef<'div'>>(null);
 
   const onChangeTab = (newValue: number) => {
     setActiveValue(newValue);
   };
 
+  const onFocus = (newValue: number) => {
+    setFocusedValue(newValue);
+    setActiveValue(newValue);
+  };
+
   const contextValue = {
     rootRef: tabsRootRef,
     activeValue: value ?? activeValue,
+    focusedValue,
     lazyMount,
     lazyBehavior,
     onChangeTab: onChange ?? onChangeTab,
+    setFocusedValue,
+    onFocus,
   };
 
   return (

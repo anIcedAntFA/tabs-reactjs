@@ -16,7 +16,7 @@ function TabTrigger({
 
   const tabTriggerRef = useRef<ElementRef<'button'>>(null);
 
-  const { activeValue, onChangeTab } = useTabsContext();
+  const { activeValue, onChangeTab, onFocus } = useTabsContext();
 
   const isActive = activeValue === currentValue;
 
@@ -29,6 +29,7 @@ function TabTrigger({
       aria-selected={isActive}
       aria-disabled={disabled}
       data-index={currentValue}
+      disabled={disabled}
       className={cx(
         'tab-trigger',
         {
@@ -38,6 +39,7 @@ function TabTrigger({
         className
       )}
       onClick={() => onChangeTab(currentValue)}
+      // onFocus={onFocus}
       {...passProps}
     >
       {children}
