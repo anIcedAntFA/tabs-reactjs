@@ -4,20 +4,25 @@ import { TabListProps } from './tabs.type';
 
 import './tabs.style.css';
 import { useEffect } from 'react';
-import { useTabsContext } from './tabs.context';
+// import { useTabsContext } from './tabs.context';
 
 function TabList({ className, children, ...passProps }: TabListProps) {
-  const { activeValue, onChangeTab } = useTabsContext();
+  // const { activeValue, onChangeTab } = useTabsContext();
 
   useEffect(() => {
-    const handleKeyDown = () => {
-      console.log('in');
+    const handleKeyDown = (event) => {
+      const nextTab = document.activeElement
+        ?.nextElementSibling as HTMLButtonElement;
+      const prevTab = document.activeElement
+        ?.previousElementSibling as HTMLButtonElement;
 
-      const nextTab = document.activeElement?.nextElementSibling as HTMLElement;
+      console.log('mouse', nextTab, prevTab);
 
-      console.log({ nextTab });
-
-      nextTab.focus();
+      if (event.key === 'ArrowRight' && nextTab) {
+        nextTab.focus();
+      } else if (event.key === 'ArrowLeft' && prevTab) {
+        prevTab.focus();
+      }
     };
 
     document.addEventListener('keydown', handleKeyDown);

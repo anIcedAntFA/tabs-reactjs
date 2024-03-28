@@ -16,7 +16,7 @@ function TabTrigger({
 
   const tabTriggerRef = useRef<ElementRef<'button'>>(null);
 
-  const { activeValue, onChangeTab, onFocus } = useTabsContext();
+  const { activeValue, onChangeTab } = useTabsContext();
 
   const isActive = activeValue === currentValue;
 

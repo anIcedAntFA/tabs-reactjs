@@ -1,14 +1,21 @@
 .tabs-root {
   position: relative;
+
+  width: 800px;
+  border-radius: var(--br-tabs);
+
+  box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.1);
 }
 
 .tabs-list {
   display: flex;
 
-  width: 100%;
+  background-color: var(--clr-bg-tabs);
 }
 
 .tab-trigger {
+  flex-grow: 1;
+
   position: relative;
 
   display: flex;
@@ -16,47 +23,46 @@
   justify-content: center;
   gap: 8px;
 
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-bottom: 1px solid #e2e8f0;
+  border-bottom-width: 1px;
   padding: 12px 24px;
 
-  font-size: 18px;
+  font-size: var(--fs-medium);
+  font-weight: var(--fw-medium);
+  letter-spacing: 1px;
 
   cursor: pointer;
-  color: #020617;
-  background-color: var(--clr-white);
+  color: var(--clr-text-base);
+  background-color: transparent;
 
-  transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+  transition: color 0.3s ease-in-out;
 
   &::before {
     content: '';
     position: absolute;
     bottom: 0;
-    z-index: -1;
 
     width: 100%;
     height: 0;
-    border-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 
-    background-color: #fff7ed;
-
+    background-color: rgba(251, 146, 60, 0.1);
 
     transition: height 0.3s ease-in-out;
   }
 
   &:hover:not(:disabled) {
-    color: #fb923c;
+    color: var(--clr-primary);
   }
 
   &:focus-visible {
-    border-color: #fb923c;
-    color: blueviolet;
+    outline: 2px solid var(--clr-primary);
   }
 }
 
 .tab-trigger--active {
-  color: #fb923c;
-  text-shadow: -0.1px -0.1px currentColor, 0.1px 0.1px;
+  color: var(--clr-primary);
 
   &::before {
     height: 100%;
@@ -64,7 +70,7 @@
   }
 }
 
-.tab-trigger:disabled{
+.tab-trigger:disabled {
   cursor: not-allowed;
   opacity: 0.4;
 }
@@ -72,11 +78,11 @@
 .tab-indicator {
   position: absolute;
 
-  margin-top: -2px;
-  height: 4px;
-  border-radius: 8px;
+  margin-top: -3px;
+  height: 3px;
+  border-radius: var(--br-tabs);
 
-  background-color: #fb923c;
+  background-color: var(--clr-primary);
 
   transition: left 0s cubic-bezier(0, 0.2, 0.4, 1.1),
     width 0s cubic-bezier(0, 0.2, 0.4, 1.1);
@@ -88,6 +94,10 @@
 
 .tab-panel {
   display: none;
+
+  padding: 24px 32px 32px;
+
+  background-color: var(--clr-bg-tabs);
 }
 
 .tab-panel--active {

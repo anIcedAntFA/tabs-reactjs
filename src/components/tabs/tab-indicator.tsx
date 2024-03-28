@@ -1,6 +1,4 @@
-import cx from 'clsx';
-
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useTabsContext } from './tabs.context';
 import './tabs.style.css';
 
@@ -12,7 +10,11 @@ type TabIndicatorRect = {
 function TabIndicator() {
   const indicatorRef = useRef<HTMLSpanElement>(null);
 
-  const [hasMeasured, setHasMeasured] = useState<boolean>(false);
+  // const [rect, setRect] = useState<TabIndicatorRect>({
+  //   left: 0,
+  //   width: 0,
+  // });
+  // const [hasMeasured, setHasMeasured] = useState<boolean>(false);
 
   const { activeValue, rootRef } = useTabsContext();
   const isFirstRender = useRef(true);
@@ -33,15 +35,14 @@ function TabIndicator() {
       `[data-index="${activeValue}"]`
     ) as HTMLButtonElement;
 
-    indicatorRef.current.style.left = `${currentActiveTab.offsetLeft}px`;
-    indicatorRef.current.style.width = `${currentActiveTab.offsetWidth}px`;
-
     if (isFirstRender.current) {
-      indicatorRef.current.style.transition = 'none';
       isFirstRender.current = false;
     } else
       indicatorRef.current.style.transition = `left 0.4s cubic-bezier(0, 0.2, 0.4, 1.1),
     width 0.4s cubic-bezier(0, 0.2, 0.4, 1.1)`;
+
+    indicatorRef.current.style.left = `${currentActiveTab.offsetLeft}px`;
+    indicatorRef.current.style.width = `${currentActiveTab.offsetWidth}px`;
 
     // setRect({
     //   left: currentActiveTab.offsetLeft,
@@ -60,12 +61,10 @@ function TabIndicator() {
     // };
   }, [activeValue, rootRef]);
 
-  console.count('TabIndicator');
-
   return (
     <span
       ref={indicatorRef}
-      className={cx('tab-indicator')}
+      className={'tab-indicator'}
       // style={{
       //   left: rect.left,
       //   width: rect.width,
