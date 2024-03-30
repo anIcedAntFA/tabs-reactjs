@@ -104,3 +104,7 @@ img {
 
   height: 100vh;
 }
+
+.tabs-wrapper {
+  max-width: 800px;
+}

@@ -3,9 +3,9 @@ import cx from 'clsx';
 import { Direction, TabListProps } from './tabs.type';
 
 import { ElementRef, KeyboardEvent, KeyboardEventHandler, useRef } from 'react';
+import { DirectionMapValue, Directions, Orientations } from './tabs.config';
 import { useTabsContext } from './tabs.context';
 import './tabs.style.css';
-import { DirectionMapValue, Directions } from './tabs.config';
 
 function TabList({ className, children, ...passProps }: TabListProps) {
   const tabListRef = useRef<ElementRef<'div'>>(null);
@@ -13,7 +13,7 @@ function TabList({ className, children, ...passProps }: TabListProps) {
   //* ref store all available tab elements
   const tabsRef = useRef<ElementRef<'button'>[]>([]);
 
-  const { focusedValue } = useTabsContext();
+  const { orientation, focusedValue } = useTabsContext();
 
   const queryTab = (selector: string) => {
     if (!tabListRef.current) return;
@@ -38,8 +38,11 @@ function TabList({ className, children, ...passProps }: TabListProps) {
     );
 
     const focusAdjacentTab = (direction: Direction) => {
-      if (focusedIndex === -1) return focusTab(0);
+      if (focusedIndex === -1) return;
 
+      //TODO Create a circular list effect.
+      //* If calculated index > last index, it wraps around to the start of the array.
+      //* If it < first index, it wraps around to the end of the array.
       const adjacentIndex =
         (tabsRef.current.length + focusedIndex + DirectionMapValue[direction]) %
         tabsRef.current.length;
@@ -47,15 +50,21 @@ function TabList({ className, children, ...passProps }: TabListProps) {
       focusTab(adjacentIndex);
     };
 
+    const isHorizontal = orientation === Orientations.HORIZONTAL;
+    const isVertical = orientation === Orientations.VERTICAL;
+
     const keyMap: Record<string, KeyboardEventHandler> = {
-      ArrowRight: () => focusAdjacentTab(Directions.RIGHT),
-      ArrowLeft: () => focusAdjacentTab(Directions.LEFT),
+      ArrowRight: () => isHorizontal && focusAdjacentTab(Directions.FORWARD),
+      ArrowLeft: () => isHorizontal && focusAdjacentTab(Directions.BACKWARD),
+      ArrowDown: () => isVertical && focusAdjacentTab(Directions.FORWARD),
+      ArrowUp: () => isVertical && focusAdjacentTab(Directions.BACKWARD),
       Home: () => focusTab(0),
       End: () => focusTab(tabsRef.current.length - 1),
       Escape: () => queryTab('[role="tab"]:focus')?.blur(),
     };
 
-    const keyAction = keyMap[event.key];
+    const keyEvent = event.key;
+    const keyAction = keyMap[keyEvent];
 
     if (keyAction) {
       event.preventDefault();
@@ -67,8 +76,16 @@ function TabList({ className, children, ...passProps }: TabListProps) {
     <div
       ref={tabListRef}
       role='tablist'
-      aria-orientation='horizontal'
-      className={cx('tabs-list', className)}
+      aria-orientation={
+        orientation === Orientations.VERTICAL ? 'vertical' : 'horizontal'
+      }
+      className={cx(
+        'tabs-list',
+        {
+          [`tabs-list--${orientation}`]: orientation,
+        },
+        className
+      )}
       onKeyDown={handleKeyDown}
       {...passProps}
     >

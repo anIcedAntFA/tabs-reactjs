@@ -1,41 +1,41 @@
 import cx from 'clsx';
-import { ElementRef, useRef, useState } from 'react';
+import { ElementRef, useId, useRef, useState } from 'react';
 
+import { Orientations } from './tabs.config';
 import { TabProvider } from './tabs.context';
 import { BaseValue, TabsProps } from './tabs.type';
-import { DEFAULT_ACTIVE_INDEX } from './tabs.config';
 
 import './tabs.style.css';
 
 function Tabs({
-  defaultValue = DEFAULT_ACTIVE_INDEX,
   value,
+  onChange,
+  orientation = Orientations.HORIZONTAL,
   activeFocusedMode = false,
   lazyMount = false,
   lazyBehavior = 'unmount',
   className,
-  onChange,
   children,
   ...passProps
 }: TabsProps) {
-  const [activeValue, setActiveValue] = useState<BaseValue>(defaultValue);
-
-  const [focusedValue, setFocusedValue] = useState<BaseValue>(defaultValue);
+  const [focusedValue, setFocusedValue] = useState<BaseValue>('');
 
   const tabsRootRef = useRef<ElementRef<'div'>>(null);
 
-  const handleChangeTab = (newValue: BaseValue) => {
-    setActiveValue(newValue);
-  };
+  const reactID = useId();
+  const internalID = passProps.id ?? reactID;
+  const tabsID = `tabs-${internalID}`;
 
   const contextValue = {
+    id: tabsID,
+    orientation,
     rootRef: tabsRootRef,
-    activeValue: value ?? activeValue,
+    activeValue: value,
     activeFocusedMode,
     focusedValue,
     lazyMount,
     lazyBehavior,
-    onChangeTab: onChange ?? handleChangeTab,
+    onChangeTab: onChange,
     setFocusedValue,
   };
 
@@ -43,7 +43,13 @@ function Tabs({
     <TabProvider value={contextValue}>
       <div
         ref={tabsRootRef}
-        className={cx('tabs-root', className)}
+        className={cx(
+          'tabs-root',
+          {
+            [`tabs-root--${orientation}`]: orientation,
+          },
+          className
+        )}
         {...passProps}
       >
         {children}

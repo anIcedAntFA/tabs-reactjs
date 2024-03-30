@@ -8,13 +8,13 @@ export const Orientations = {
 } as const;
 
 export const Directions = {
-  LEFT: 'left',
-  RIGHT: 'right',
+  FORWARD: 'forward',
+  BACKWARD: 'backward',
 } as const;
 
 export const DirectionMapValue: {
   [key in Direction]: number;
 } = {
-  [Directions.LEFT]: -1,
-  [Directions.RIGHT]: 1,
-} as const;
+  [Directions.FORWARD]: 1,
+  [Directions.BACKWARD]: -1,
+};

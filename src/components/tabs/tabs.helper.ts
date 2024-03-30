@@ -1,4 +1,4 @@
-import { LazyControl } from './tabs.type';
+import { BaseValue, LazyControl } from './tabs.type';
 
 export const lazyControl = ({
   enabled,
@@ -13,4 +13,12 @@ export const lazyControl = ({
   if (mode === 'keepMounted' && wasActive) return true;
 
   return false;
+};
+
+export const generateTabId = (id: string, value: BaseValue) => {
+  return `${id}--tab-${value}`;
+};
+
+export const generateTabPanelId = (id: string, value: BaseValue) => {
+  return `${id}--tabpanel-${value}`;
 };

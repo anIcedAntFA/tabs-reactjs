@@ -1,24 +1,21 @@
 import cx from 'clsx';
-import { useId, useRef } from 'react';
+import { useRef } from 'react';
 
 import { useTabsContext } from './tabs.context';
-import { lazyControl } from './tabs.helper';
+import { generateTabId, generateTabPanelId, lazyControl } from './tabs.helper';
 import { TabPanelProps } from './tabs.type';
 
 import './tabs.style.css';
 
 function TabPanel({
-  id,
   value: currentValue,
   className,
   children,
   ...passProps
 }: TabPanelProps) {
-  const internalID = useId();
-
   const hasBeenActive = useRef<boolean>(false);
 
-  const { activeValue, lazyMount, lazyBehavior } = useTabsContext();
+  const { id, activeValue, lazyMount, lazyBehavior } = useTabsContext();
 
   const isActiveTab = activeValue === currentValue;
 
@@ -35,9 +32,10 @@ function TabPanel({
     <>
       {shouldRender ? (
         <div
-          id={id ?? `tabs-${internalID}--tabpanel-${currentValue}`}
+          id={generateTabPanelId(id, currentValue)}
           hidden={!isActiveTab}
           role='tabpanel'
+          aria-labelledby={generateTabId(id, currentValue)}
           tabIndex={0}
           className={cx(
             'tab-panel',

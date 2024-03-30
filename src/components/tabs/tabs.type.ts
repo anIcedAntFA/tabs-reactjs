@@ -23,6 +23,8 @@ export type DirectionKey = keyof typeof Directions;
 export type Direction = (typeof Directions)[DirectionKey];
 
 export type TabsContextState = {
+  id: string;
+  orientation: Orientation;
   rootRef: RefObject<ElementRef<'div'>>;
   activeValue: BaseValue;
   focusedValue: BaseValue;
@@ -42,24 +44,26 @@ export type LazyControl = Partial<{
 
 export type TabsProps = OverrideProps<
   ComponentPropsWithoutRef<'div'>,
+  {
+    value: BaseValue;
+    onChange: (tab: BaseValue) => void;
+  }
+> &
   Partial<{
-    defaultValue: TabsContextState['activeValue'];
-    value: TabsContextState['activeValue'];
+    orientation: Orientation;
     activeFocusedMode: boolean;
     lazyMount: boolean;
     lazyBehavior: LazyMode;
-    onChange: (tab: TabsContextState['activeValue']) => void;
-  }>
->;
+  }>;
 
 export type TabListProps = ComponentPropsWithoutRef<'div'>;
 
 export type TabTriggerProps = ComponentPropsWithoutRef<'button'> & {
-  value: TabsContextState['activeValue'];
+  value: BaseValue;
 };
 
 export type TabPanelGroupProps = ComponentPropsWithoutRef<'div'>;
 
 export type TabPanelProps = ComponentPropsWithoutRef<'div'> & {
-  value: TabsContextState['activeValue'];
+  value: BaseValue;
 };
