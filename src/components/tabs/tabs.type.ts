@@ -1,16 +1,36 @@
-import { ComponentPropsWithoutRef, ElementRef, RefObject } from 'react';
+import {
+  ComponentPropsWithoutRef,
+  Dispatch,
+  ElementRef,
+  RefObject,
+  SetStateAction,
+} from 'react';
+import { Directions, Orientations } from './tabs.config';
 
 export type OverrideProps<T, TOverridden> = Omit<T, keyof TOverridden> &
   TOverridden;
 
+export type BaseValue = number | string;
+
 export type LazyMode = 'unmount' | 'keepMounted';
+
+export type OrientationKey = keyof typeof Orientations;
+
+export type Orientation = (typeof Orientations)[OrientationKey];
+
+export type DirectionKey = keyof typeof Directions;
+
+export type Direction = (typeof Directions)[DirectionKey];
 
 export type TabsContextState = {
   rootRef: RefObject<ElementRef<'div'>>;
-  activeValue: number;
+  activeValue: BaseValue;
+  focusedValue: BaseValue;
+  activeFocusedMode: boolean;
   lazyMount: boolean;
   lazyBehavior: LazyMode;
-  onChangeTab: (newIndex: number) => void;
+  onChangeTab: (newIndex: BaseValue) => void;
+  setFocusedValue: Dispatch<SetStateAction<BaseValue>>;
 };
 
 export type LazyControl = Partial<{
@@ -25,6 +45,7 @@ export type TabsProps = OverrideProps<
   Partial<{
     defaultValue: TabsContextState['activeValue'];
     value: TabsContextState['activeValue'];
+    activeFocusedMode: boolean;
     lazyMount: boolean;
     lazyBehavior: LazyMode;
     onChange: (tab: TabsContextState['activeValue']) => void;

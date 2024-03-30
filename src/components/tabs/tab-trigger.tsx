@@ -1,5 +1,5 @@
 import cx from 'clsx';
-import { ElementRef, useId, useRef } from 'react';
+import { useId } from 'react';
 
 import { useTabsContext } from './tabs.context';
 import './tabs.style.css';
@@ -14,16 +14,26 @@ function TabTrigger({
 }: TabTriggerProps) {
   const id = useId();
 
-  const tabTriggerRef = useRef<ElementRef<'button'>>(null);
-
-  const { activeValue, onChangeTab } = useTabsContext();
+  const { activeValue, activeFocusedMode, onChangeTab, setFocusedValue } =
+    useTabsContext();
 
   const isActive = activeValue === currentValue;
+
+  const handleClick = () => {
+    if (disabled) return;
+    onChangeTab(currentValue);
+  };
+
+  const handleFocus = () => {
+    setFocusedValue(currentValue);
+
+    if (activeFocusedMode) onChangeTab(currentValue);
+  };
 
   return (
     <button
       id={`tabs-${id}--tab-${currentValue}`}
-      ref={tabTriggerRef}
+      type='button'
       role='tab'
       tabIndex={isActive ? 0 : -1}
       aria-selected={isActive}
@@ -38,8 +48,8 @@ function TabTrigger({
         },
         className
       )}
-      onClick={() => onChangeTab(currentValue)}
-      // onFocus={onFocus}
+      onClick={handleClick}
+      onFocus={handleFocus}
       {...passProps}
     >
       {children}

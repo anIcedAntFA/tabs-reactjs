@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import './App.css';
 import {
+  BaseValue,
   TabIndicator,
   TabList,
   TabPanel,
@@ -9,9 +11,17 @@ import {
 } from './components/tabs';
 
 function App() {
+  const [activeValue, setActiveValue] = useState<BaseValue>(1);
+
   return (
     <div className='app-wrapper'>
-      <Tabs defaultValue={1} lazyMount lazyBehavior='keepMounted'>
+      <Tabs
+        value={activeValue}
+        activeFocusedMode
+        lazyMount
+        lazyBehavior='keepMounted'
+        onChange={(value) => setActiveValue(value)}
+      >
         <TabList>
           <TabTrigger value={0}>
             <span>All results</span>

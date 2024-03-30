@@ -24,7 +24,7 @@ function TabPanel({
 
   if (isActiveTab) hasBeenActive.current = true;
 
-  const shouldRenderContent = lazyControl({
+  const shouldRender = lazyControl({
     enabled: lazyMount,
     isActive: isActiveTab,
     wasActive: hasBeenActive.current,
@@ -33,7 +33,7 @@ function TabPanel({
 
   return (
     <>
-      {shouldRenderContent ? (
+      {shouldRender ? (
         <div
           id={id ?? `tabs-${internalID}--tabpanel-${currentValue}`}
           hidden={!isActiveTab}

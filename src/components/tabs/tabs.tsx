@@ -2,7 +2,7 @@ import cx from 'clsx';
 import { ElementRef, useRef, useState } from 'react';
 
 import { TabProvider } from './tabs.context';
-import { TabsProps } from './tabs.type';
+import { BaseValue, TabsProps } from './tabs.type';
 import { DEFAULT_ACTIVE_INDEX } from './tabs.config';
 
 import './tabs.style.css';
@@ -10,6 +10,7 @@ import './tabs.style.css';
 function Tabs({
   defaultValue = DEFAULT_ACTIVE_INDEX,
   value,
+  activeFocusedMode = false,
   lazyMount = false,
   lazyBehavior = 'unmount',
   className,
@@ -17,30 +18,25 @@ function Tabs({
   children,
   ...passProps
 }: TabsProps) {
-  const [activeValue, setActiveValue] = useState<number>(defaultValue);
+  const [activeValue, setActiveValue] = useState<BaseValue>(defaultValue);
 
-  const [focusedValue, setFocusedValue] = useState<number>(defaultValue);
+  const [focusedValue, setFocusedValue] = useState<BaseValue>(defaultValue);
 
   const tabsRootRef = useRef<ElementRef<'div'>>(null);
 
-  const onChangeTab = (newValue: number) => {
-    setActiveValue(newValue);
-  };
-
-  const onFocus = (newValue: number) => {
-    setFocusedValue(newValue);
+  const handleChangeTab = (newValue: BaseValue) => {
     setActiveValue(newValue);
   };
 
   const contextValue = {
     rootRef: tabsRootRef,
     activeValue: value ?? activeValue,
+    activeFocusedMode,
     focusedValue,
     lazyMount,
     lazyBehavior,
-    onChangeTab: onChange ?? onChangeTab,
+    onChangeTab: onChange ?? handleChangeTab,
     setFocusedValue,
-    onFocus,
   };
 
   return (
