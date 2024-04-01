@@ -24,8 +24,7 @@ function TabTrigger({
   const isActive = activeValue === currentValue;
 
   const handleClick = () => {
-    if (disabled) return;
-    onChangeTab(currentValue);
+    if (!disabled) onChangeTab(currentValue);
   };
 
   const handleFocus = () => {
